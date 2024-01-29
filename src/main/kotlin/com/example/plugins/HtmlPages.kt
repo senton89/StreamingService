@@ -57,34 +57,71 @@ val main_form = ("""
     </div>
 </div>
 <div class = "form">
-    <form action="/view-video" method="get" enctype="multipart/form-data">
+    <form id="submit-form" action="/upload" method="post" enctype="multipart/form-data">
         <label for="fileUpload">Выберите видеофайл для загрузки:</label>
         <input type="file" id="fileUpload" name="fileUpload" accept="video/*">
         <input type="submit" value="Загрузить">
     </form>
 </div>
 </body>
+<script>
+document.getElementById('submit-form').onsubmit = function() {
+    fetch('/upload', {
+        method: 'POST',
+        body: new FormData(this),
+    }).then(() => {
+        window.location.href = '/view-video/';
+    }).catch((error) => {
+        console.error('Error:', error);
+    });
+    return false;
+};
+</script>
 </html>
 """)
 
+
+
 val video_form = ("""
                     <!DOCTYPE html>
-                    <html lang="en">
-                    <head>
-                        <meta charset="UTF-8">
-                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                        <title>Video Stream</title>
-                        <style>
-                        body {
-                        background-color: #000024;
-                        }
-                        </style>
-                    </head>
-                    <body>
-                        <video width="1900" height="900" controls>
-                            <source src="/upload" type="video/mp4">
-                            Ваш браузер не поддерживает элемент <code>video</code>.
-                        </video>
-                    </body>
-                    </html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Stream</title>
+    <!-- Include the Video.js library CSS -->
+    <link href="https://unpkg.com/video.js/dist/video-js.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #000024;
+        }
+        .video-js {
+            width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- Setup the video player with Video.js -->
+    <video 
+        id="my_video_1" 
+        class="video-js vjs-default-skin" 
+        controls 
+        preload="auto" 
+        width="1900" 
+        height="900" 
+        data-setup='{}'>
+        <source src="/upload" type="video/mp4">
+        Ваш браузер не поддерживает элемент <code>video</code>.
+    </video>
+    <script src="https://unpkg.com/video.js/dist/video.js"></script>
+    <script src="https://unpkg.com/videojs-http-streaming/dist/videojs-http-streaming.js"></script>
+    <script>
+        (function() {
+            videojs(document.querySelector('#my_video_1'));
+        })();
+    </script>
+</body>
+</html>
+
                 """)
