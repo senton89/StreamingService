@@ -8,7 +8,6 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.minio.*
 import io.minio.http.Method
-import io.minio.messages.DeleteObject
 import java.io.ByteArrayInputStream
 import com.example.minioClient as currentMinioClient
 
