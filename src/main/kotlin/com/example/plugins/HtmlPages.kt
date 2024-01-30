@@ -51,9 +51,10 @@ val main_form = ("""
         <h1>Welcome to<br>my stream</h1>
     </div>
     <div class="social-icons">
-        <a href="https://github.com/yourusername" target="_blank" style="color: white;"><img src = "file:///C:/Users/sento/Downloads/github-pages-logo-repository-fork-github-86eddab19cbc3ae293ada0fe0fb9e27d.png" height = "35"></img></a>
-        <br>
-        <a href="https://t.me/yourusername" target="_blank" style="color: white;"><img src = "C:\Users\sento\Downloads\telegram-icon-2048x2048-oont1oj1.png" height = "35"></img></a>
+        <a href="https://github.com/senton89" target="_blank" style="color: white;">
+        <img src = "/static/github-logo.png" height = "35">
+        </img>
+        </a>  
     </div>
 </div>
 <div class = "form">

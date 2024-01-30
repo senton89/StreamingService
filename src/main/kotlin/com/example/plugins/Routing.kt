@@ -3,12 +3,14 @@ package com.example.plugins
 import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.server.application.*
+import io.ktor.server.http.content.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.minio.*
 import io.minio.http.Method
 import java.io.ByteArrayInputStream
+import java.io.File
 import com.example.minioClient as currentMinioClient
 
 const val bucketName = "stream-service"
@@ -25,6 +27,9 @@ fun Application.configureRouting() {
         deleteBucketWithObjects(bucketName)
     }
     routing {
+        static("/static"){
+            resources("Images")
+        }
         get("/") {
             call.respondText(main_form.trimIndent(), ContentType.Text.Html)
         }
