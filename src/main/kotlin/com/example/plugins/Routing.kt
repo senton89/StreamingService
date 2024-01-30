@@ -8,6 +8,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.minio.*
 import io.minio.http.Method
+import io.minio.messages.DeleteObject
 import java.io.ByteArrayInputStream
 import com.example.minioClient as currentMinioClient
 
@@ -19,6 +20,20 @@ fun Application.configureRouting() {
     if (!isBucketExist) {
         currentMinioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build())
         println("Bucket created successfully.")
+    }
+    environment.monitor.subscribe(ApplicationStopping) {
+        // Код для очистки при выходе из приложения
+           /* try {
+                currentMinioClient.removeObject(bucketName, "")
+                currentMinioClient.removeBucket(RemoveBucketArgs
+                    .builder()
+                    .bucket(bucketName)
+                    .build())
+                call.respondText("Bucket $bucketName and its contents have been deleted", status = HttpStatusCode.OK)
+            } catch (ex: Exception) {
+                call.respondText("Unable to delete bucket $bucketName: ${ex.message}", status = HttpStatusCode.InternalServerError)
+            }*/
+        deleteBucketWithObjects(bucketName)
     }
     routing {
         get("/") {
@@ -56,6 +71,7 @@ fun Application.configureRouting() {
                     else -> {
                         this@configureRouting.log.error("Received an unsupported part type: ${part::class}")
                 }
+
             }
 
                 part.dispose()
@@ -90,6 +106,39 @@ fun Application.configureRouting() {
                 }
             }
         }
-
     }
 }
+ fun deleteBucketWithObjects(bucketName: String) {
+ // Сначала удалим все объекты в bucket
+ try {
+        val objectsList = currentMinioClient.listObjects(
+        ListObjectsArgs.builder().bucket(bucketName).recursive(true).build()
+ ).iterator()
+
+ val removeObjectList = mutableListOf<String>()
+
+     objectsList.forEach { item ->
+         try {
+             removeObjectList.add(item.get().objectName())
+         }
+         catch (e: Exception){
+             e.printStackTrace()
+         }
+ }
+     for(removeObject in removeObjectList) {
+             currentMinioClient.removeObject(
+                 RemoveObjectArgs
+                     .builder()
+                     .bucket(bucketName)
+                     .`object`(removeObject)
+                     .build()
+             )
+     }
+ // Теперь удалим сам bucket
+ currentMinioClient.removeBucket(RemoveBucketArgs.builder().bucket(bucketName).build())
+
+ println("Bucket '$bucketName' и все его содержимое были успешно удалены.")
+ } catch (e: Exception) {
+ println("Возникла ошибка при удалении bucket: ${e.message}")
+ }
+ }
