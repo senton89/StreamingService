@@ -10,7 +10,6 @@ import io.ktor.server.routing.*
 import io.minio.*
 import io.minio.http.Method
 import java.io.ByteArrayInputStream
-import java.io.File
 import com.example.minioClient as currentMinioClient
 
 const val bucketName = "stream-service"
