@@ -23,16 +23,6 @@ fun Application.configureRouting() {
     }
     environment.monitor.subscribe(ApplicationStopping) {
         // Код для очистки при выходе из приложения
-           /* try {
-                currentMinioClient.removeObject(bucketName, "")
-                currentMinioClient.removeBucket(RemoveBucketArgs
-                    .builder()
-                    .bucket(bucketName)
-                    .build())
-                call.respondText("Bucket $bucketName and its contents have been deleted", status = HttpStatusCode.OK)
-            } catch (ex: Exception) {
-                call.respondText("Unable to delete bucket $bucketName: ${ex.message}", status = HttpStatusCode.InternalServerError)
-            }*/
         deleteBucketWithObjects(bucketName)
     }
     routing {
