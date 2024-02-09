@@ -9,7 +9,7 @@ import io.minio.MinioClient
 val minioClient: MinioClient
     get() = MinioClient.builder()
         .endpoint("http://localhost:9000")
-        .credentials("senton", "89314951rrsad/")
+        .credentials("username", "password")
         .build()
 
 fun main() {
