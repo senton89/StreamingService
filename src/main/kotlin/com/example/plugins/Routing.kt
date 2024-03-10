@@ -128,6 +128,7 @@ fun Application.configureRouting() {
              )
      }
  // Теперь удалим сам bucket
+ // famous foam dolphin foil never leave attend vacuum mobile bubble evoke off
  currentMinioClient.removeBucket(RemoveBucketArgs.builder().bucket(bucketName).build())
 
  println("Bucket '$bucketName' и все его содержимое были успешно удалены.")
